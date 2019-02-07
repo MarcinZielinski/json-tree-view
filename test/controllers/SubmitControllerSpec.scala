@@ -62,22 +62,16 @@ class SubmitControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecti
       print(html.toString())
       Then("proper tree structure should be generated")
       html.toString() mustEqual
-        """|<ul class="tree">
-           |<li><a href=#>1</a>
+        """|<ul class="tree"><li><a href=#>1</a>
            |<ul>
            |<li>id: 1</li>
-           |<li>name: A</li>
-           |<li><a href=#>nodes:
-           |<ul>
-           |<li><a href=#>1</a>
+           |<li>name: A</li><li><a href=#>nodes:</a><ul><li><a href=#>1</a>
            |<ul>
            |<li>id: 2</li>
-           |<li>name: AA</li>
-           |</ul></li></ul></a></li></ul></li>
-           |<li><a href=#>2</a>
+           |<li>name: AA</li></ul></li></ul></li></ul></li><li><a href=#>2</a>
            |<ul>
            |<li>id: 3</li>
-           |<li>name: B</li></ul></li></ul>""".stripMargin.replaceAll("\n","")
+           |<li>name: B</li></ul></li></ul>""".stripMargin
 
     }
   }

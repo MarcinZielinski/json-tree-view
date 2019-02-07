@@ -22,32 +22,23 @@ class SubmitController @Inject()(cc: ControllerComponents) extends AbstractContr
   }
 
   def convertToHtml(nodes: List[Node]): Html = {
-    def buildTree: String = {
-      "<ul class=\"tree\">" + commonPart(nodes) + "</ul>"
+    def buildTree: String = s"""<ul class="tree">${addNodes(nodes)}</ul>"""
+
+    def addNodes(currUlNodes: List[Node]): String = {
+      currUlNodes.zipWithIndex.map {
+        case (currNode, index) =>
+          var res =
+            s"""|<li><a href=#>${index + 1}</a>
+                |<ul>
+                |<li>id: ${currNode.id}</li>
+                |<li>name: ${currNode.name}</li>""".stripMargin
+          currNode.nodes.foreach(_ => res += s"<li><a href=#>nodes:</a>${addChildrenNodes(currNode.nodes.get)}</li>")
+          res += "</ul></li>"
+          res
+      }.mkString
     }
 
-    def commonPart(currUlNodes: List[Node]): String = {
-      var res = ""
-      var index = 1
-      for (currNode <- currUlNodes) {
-        res += "<li><a href=#>" + index + "</a>"
-        res += "<ul>"
-        res += "<li>id: " + currNode.id + "</li>"
-        res += "<li>name: " + currNode.name + "</li>"
-        if (currNode.nodes.isDefined) {
-          res += "<li><a href=#>nodes:" + addChildren(currNode.nodes.get) + "</a></li>"
-        }
-        res += "</ul></li>"
-        index += 1
-      }
-      res
-    }
-
-    def addChildren(currUlNodes: List[Node]): String = {
-      var res = "<ul>"
-      res += commonPart(currUlNodes)
-      res + "</ul>"
-    }
+    def addChildrenNodes(currUlNodes: List[Node]): String = s"""<ul>${addNodes(currUlNodes)}</ul>"""
 
     Html(buildTree)
   }
