@@ -1,0 +1,12 @@
+@import model.JsonForm
+@import helper.{textarea, _}
+
+@(jsonForm: Form[JsonForm])(implicit messages: Messages, request: RequestHeader)
+
+@main("Json Tree Viewer") {
+    @form(action = helper.CSRF(routes.SubmitController.submit())) {
+        @textarea(jsonForm("json"), '_label -> "Enter json:")
+
+        <input type="submit" value="Submit">
+    }
+}
